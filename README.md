@@ -1,4 +1,4 @@
-#42school
+# 42school
 Projects from 42 Piscine and main education
 
 This repository contain library that reproduce behaviour from basic function from stdlib.h, string.h.
