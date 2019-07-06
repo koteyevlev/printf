@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:47:46 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/05 22:05:03 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/06 16:03:16 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,41 @@ char	*ft_stept(int step)
 	return (new);
 }
 
+void	ft_print_krit(t_pattern tmp, double nbr, int step)
+{
+	int	index;
+
+	index = tmp.width;
+	while (!tmp.minus && ((index > 4 && nbr < 0) ||
+	((nbr > 0 || step == 16384) && index > 3)))
+	{
+		ft_putchar(' ');
+		index--;
+	}
+	if (nbr == -1.0 / 0.0)
+	{
+		ft_putchar('-');
+		index--;
+	}
+	if (nbr > 0 && tmp.minus && (tmp.space || tmp.plus))
+	{
+		if (tmp.plus)
+			ft_putchar('+');
+		else if (tmp.space)
+			ft_putchar(' ');
+		index--;
+	}
+	if (nbr == 1.0 / 0.0 || nbr == -1.0 / 0.0)
+		ft_putstr("inf");
+	if (step == 16384)
+		ft_putstr("nan");
+	while (tmp.minus && index > 3)
+	{
+		ft_putchar(' ');
+		index--;
+	}
+}
+
 char	*ft_zerostr(void)
 {
 	char	*new;
@@ -191,6 +226,39 @@ char	*ft_zerostr(void)
 	return (new);
 }
 
+void	ft_round(char **ost, t_pattern tmp)
+{
+	char	*one;
+	char	*tofree;
+
+	if (tmp.precision > 4932)
+		return ;
+	if (ft_strindex("56789", (*ost)[tmp.precision + 1]) < 0)
+	{
+		(*ost)[tmp.precision + 1] = '\0';
+		return ;
+	}
+	else
+	{
+		one = ft_zerostr();
+		one[tmp.precision] = '1';
+		tofree = *ost;
+		*ost = ft_sum(tofree, one); //problem with convertion to natural - only after . counted
+		free(one);
+		free(tofree);
+		(*ost)[tmp.precision + 1] = '\0';
+		return ;
+	}
+}
+
+int		ft_sign(int nbr)
+{
+	if (nbr < 0)
+		return (-1);
+	else
+		return (1);
+}
+
 void	ft_print_main(t_pattern tmp, char **ld, char **ost, int byte)
 {
 	if (!*ld)
@@ -200,9 +268,9 @@ void	ft_print_main(t_pattern tmp, char **ld, char **ost, int byte)
 	if (tmp.precision < 0)
 		tmp.precision = 6;
 	while (*ld && (*ld)[byte] == '0' && ((byte + tmp.width -
-	tmp.precision - 4934) != 0 || tmp.minus))
+	tmp.precision - 4934) != 0 || tmp.minus) && byte != 4932)
 		byte++;
-	while (!tmp.zero && *ld && (*ld)[byte] == '0' && !tmp.minus)
+	while (!tmp.zero && *ld && (*ld)[byte] == '0' && !tmp.minus && byte != 4932)
 	{
 		ft_putchar(' ');
 		byte++;
@@ -211,19 +279,22 @@ void	ft_print_main(t_pattern tmp, char **ld, char **ost, int byte)
 	}
 	if (tmp.plus)
 		ft_putchar('+');
-	(*ost)[tmp.precision + 1] = '\0';
-//	printf("%s.%s", &((*ld)[byte]), &((*ost)[1])); // will be in the end than string will work
+	else if (tmp.space && (tmp.width-- || 0 == 0))
+		ft_putchar(' ');
+	ft_round(ost, tmp);
 	ft_putstr(&((*ld)[byte]));
-	ft_putchar('.');
+	if (tmp.precision != 0) // bag with width, maybe dont work
+		ft_putchar('.');
+	else
+		tmp.width++;
 	ft_putstr(&((*ost)[1]));
 	if (tmp.minus && tmp.plus)
 		byte--;
 	while (tmp.minus && (byte + tmp.width - tmp.precision - 4934) != 0)
 	{
 		ft_putchar(' ');
-		byte--;
+		byte = byte - ft_sign(byte); //dont know
 	}
-	ft_putchar('\n');
 	free(*ld);
 	free(*ost);
 }
@@ -258,9 +329,19 @@ void	ft_print_f(t_pattern tmp, long double nbr)
 {
 	int			i;
 	int			byte;
+	t_form_lf	n;
+	int			step;
 
+	n.f = nbr;
+	step = n.bytes.exponent - 16383;
 	i = 0;
 	byte = 63;
+	if (step == 16384 || (double)nbr == 1.0 / 0.0
+	|| (double)nbr == -1.0 / 0.0)
+	{
+		ft_print_krit(tmp, (double)nbr, step);
+		return ;
+	}
 	ft_print_f_help(tmp, nbr, i, byte);
 }
 
