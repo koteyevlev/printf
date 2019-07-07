@@ -6,7 +6,7 @@
 #    By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/22 12:33:09 by lbritni           #+#    #+#              #
-#    Updated: 2019/07/07 21:00:18 by skrystin         ###   ########.fr        #
+#    Updated: 2019/07/07 22:15:48 by skrystin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,3 +33,6 @@ fclean: clean
 	@/bin/rm -f libft/*h.gch
 
 re: fclean all
+
+comp: all clean
+	@gcc -Wall -Wextra -Werror -o check main.c -L ./ -lftprintf
