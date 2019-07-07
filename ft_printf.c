@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/07 19:10:16 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/07 20:55:37 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "printf.h"
 #include "string.h"
 
-void new_pattern(t_pattern *tmp)
+void		new_pattern(t_pattern *tmp)
 {
 	tmp->hash = 0;
 	tmp->minus = 0;
@@ -31,10 +31,11 @@ void new_pattern(t_pattern *tmp)
 	tmp->l = 0;
 	tmp->hh = 0;
 	tmp->ll = 0;
+	tmp->help = 0;
 	tmp->type = 0;
 }
 
-int		ft_cast(char c)
+int			ft_cast(char c)
 {
 	if (c == 'h' || c == 'l' || c == 'j' || c == 'z')
 		return (1);
@@ -42,60 +43,51 @@ int		ft_cast(char c)
 		return (0);
 }
 
-
-int	type(char c)
+int			type(char c)
 {
 	if (c == 's' || c == 'S' || c == 'p' || c == 'd' ||
 		c == 'D' || c == 'i' || c == 'o' || c == 'O' ||
 		c == 'u' || c == 'U' || c == 'x' || c == 'X' ||
-		c == 'c' || c == 'C' || c == 'f')
+		c == 'c' || c == 'C')
 		return (1);
 	else
 		return (0);
 }
 
-int	ft_flag(char c)
+int			ft_flag(char c)
 {
 	if (c == '-' || c == '+' || c == ' ' || c == '#' || c == '0')
 		return (1);
 	return (0);
 }
 
-int	print(t_pattern tmp, va_list factor)
+int			print(t_pattern tmp, va_list factor)
 {
+	char c;
+	
 	if (tmp.type == 'd' || tmp.type == 'i' || tmp.type == 'D')
-	{
 		print_int(tmp, factor);
-		return (1);
-	}
+	else if (tmp.type == 'u')
+		print_u(tmp, factor);
 	else if (tmp.type == 'c')
 	{
-		ft_putchar(va_arg(factor, int));
-		return (1);
+		c = (va_arg(factor, int));
+		print_c(tmp, c);
 	}
 	else if (tmp.type == 's')
-	{
-		ft_putstr(va_arg(factor, char*));
-		return (1);
-	}
+		print_s(tmp, factor);
 	else if (tmp.type == 'f')
-	{
 		ft_print_f(tmp, va_arg(factor, double));
-		return (1);
-	}
 	else if (tmp.type == 'f' || tmp.type == 'x'
 	|| tmp.type == 'X' || tmp.type == 'o')
-	{
 		ft_print_p(tmp, va_arg(factor, long long int));
-		return (1);
-	}
-	return(0);
+	return (0);
 }
 
 int	ft_search(char c, t_pattern tmp, va_list factor)
 {
 	int	count;
-	
+
 	count = 0;
 	if (type(c) != 0)
 	{
@@ -103,10 +95,10 @@ int	ft_search(char c, t_pattern tmp, va_list factor)
 		print(tmp, factor);
 		count++;
 	}
-	else if (!ft_strindex("0123456789.;# '+-hlL\0", c)) //My part 1 
+	else if (ft_strindex("*0123456789.;# '+-hlL\0", c) < 0) // added flag '*'
 	{
 		tmp.type = 'c';
-	//	print_c(tmp, c); //char print function
+		print_c(tmp, c);
 		count++;
 	}
 	return (count);
@@ -114,25 +106,19 @@ int	ft_search(char c, t_pattern tmp, va_list factor)
 
 int	ft_parse(const char *format, int *i, t_pattern *tmp, va_list factor)
 {
-	if (ft_flag(format[*i]) != 0)
+	while (ft_flag(format[*i]) != 0) // for multiple flags use 'while' 
 		addflag(tmp, format[(*i)++]);
-//	printf("%d\n", format[(*i)++]);
 	if ((format[*i] >= '0' && format[*i] <= '9') || format[*i] == '*')
 		tmp->width = ft_num(format, i, factor); 
-//	printf("tmp->width = %d\n", tmp->width);
 	if (format[*i] == '.')
 	{
 		(*i)++;
 		tmp->precision = ft_num(format, i, factor);
-//		printf("tmp->precision = %d\n", tmp->precision);
 	}
 	if (ft_cast(format[*i]) != 0)
 		{
 		put_cast(tmp, format, i);
-//		(*i)++;
 		}
-//	printf("cast h %d\n", tmp->l);
-//	printf("cast hh  %d\n", tmp->ll); 
 	return (0);
 
 	
@@ -148,7 +134,7 @@ int	ft_printf(const char *format, ...)
 	va_start(factor, format);
 	while (format[i] != 0)
 	{
-		if (format[i] == '%')
+		if(format[i] == '%')
 		{
 			new_pattern(&tmp);
 			i++;
@@ -168,26 +154,20 @@ int	ft_printf(const char *format, ...)
 	return (result);
 }
 
-int main()
+/* int main()
 {
-//	int res;
-//	int test = 222;
+	int res;
+
+	res = printf("%+2.4d", -666);
+	printf("\nres %d\n", res);
+
+	res = ft_printf("%+2.4d", -666);
+	printf("\nmy res %d\n", res);
+
+	int test = 222;
 	
-//	printf ("TEST 0\n");
-	
-//	res = ft_printf("bb %05.0dbb %%\n",  test);
-//	printf("my res %d\n", res);
-	
-//	res =  printf("bb %05.0dbb %%\n", test);
-//	printf("res %d\n", res);
-//	char *str = "str%6}";
-	ft_printf("%-#20o\n", 2134567890);
-	ft_putchar('\n');
-	printf("%-#20o\n", 2134567890);
-//	if (strcmp((ft_printf("% d\n", test),pri2ntf("% d\n", test))  == 0))
-//		printf("OK");
-//	printf ("---------------------------\n");
-/*	 printf ("TEST 1\n");
+	printf ("---------------------------\n"); 
+	 printf ("TEST 1\n");
 	res = ft_printf("%d\n", test);
 	printf("my res %d\n", res);
 	res = printf("%d\n", test);
@@ -284,5 +264,5 @@ int main()
 	res = ft_printf("% 2.4d\n",test);
 	printf("my res %d\n", res);
 	res = printf("% 2.4d\n",test);
-	printf("res %d\n", res);*/
-}
+	printf("res %d\n", res);
+} */

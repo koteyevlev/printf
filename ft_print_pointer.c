@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:37:41 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/07 19:15:04 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/07 20:54:07 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	ft_print_p(t_pattern tmp, long long int ptr)
 	if (tmp.type == 'X')
 		ft_strcapitalize(&str);
 	ft_putstr(str);
-	while (tmp.minus && tmp.width > ft_strlen(str))
+	while (tmp.minus && tmp.width > (int)ft_strlen(str))
 	{
 		ft_putchar(' ');
 		tmp.width--;

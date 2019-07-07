@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:47:46 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/06 17:12:18 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/07 20:55:16 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,7 +323,7 @@ char	*ft_sumdel(char **first, int step)
 	return (res);
 }
 
-void	ft_print_f_help(t_pattern tmp, long double nbr, int i, int byte)
+void	ft_print_f_help(t_pattern tmp, long double nbr, int byte)
 {
 	t_form_lf	n;
 	int			step;
@@ -365,7 +365,7 @@ void	ft_print_f(t_pattern tmp, long double nbr)
 		ft_print_krit(tmp, (double)nbr, step);
 		return ;
 	}
-	ft_print_f_help(tmp, nbr, i, byte);
+	ft_print_f_help(tmp, nbr, byte);
 }
 
 

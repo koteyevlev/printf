@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   print_int.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wtorwold <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/06/30 21:21:42 by wtorwold         ###   ########.fr       */
+/*   Updated: 2019/07/07 20:47:39 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	put_cast(t_pattern *tmp, const char *format, int *i)
 	}
 	 else if (format[*i] == 'l' && format[(*i) + 1] == 'l')
 	{
-	tmp->ll = 1;
-	(*i) = (*i) + 2;
+		tmp->ll = 1;
+		(*i) = (*i) + 2;
 	}
 }
 
@@ -105,7 +105,147 @@ long long	 va_arg_help(va_list factor, t_pattern *tmp)
 	
 }
 
-void	print_int(t_pattern tmp, va_list factor)
+void    print_u(t_pattern tmp, va_list factor)
+{
+	unsigned int digit;
+	int	space;
+	int	zero;
+
+	space = 0;
+	zero = 0;
+	digit = va_arg(factor, int);
+	if (tmp.precision > ft_countdigit(digit))
+	{
+	zero = tmp.precision - ft_countdigit(digit);
+	if (tmp.width > tmp.precision)
+		space = tmp.width -  tmp.precision;
+	}
+	else if (tmp.width > ft_countdigit(digit))
+		 space = tmp.width - ft_countdigit(digit);
+
+
+
+	if (tmp.minus != 1)
+//	{
+	if (tmp.zero == 1)
+	while(space-- > 0)
+		 ft_putchar('0');
+//	else
+	while(space-- > 0)
+		ft_putchar(' ');
+//	}
+	while(zero-- > 0)
+		ft_putchar('0');
+	ft_putnbr(digit);
+	if (tmp.minus == 1)
+	while(space-- > 0)
+		ft_putchar(' ');
+}
+
+void    print_int(t_pattern tmp, va_list factor)
+{
+	long long digit;
+//	int s;
+	int neg;
+	int     space;
+	int     zero;
+	int	f;
+
+	f = 0;
+	space = 0;
+	zero = 0;
+	neg = 0;
+	digit = va_arg_help(factor, &tmp);
+	if (digit < 0)
+		neg = 1;
+	if (neg == 1 || tmp.plus == 1 || tmp.space == 1)
+		f = 1;
+	if (tmp.precision > ft_countdigit(digit))
+        {         zero = tmp.precision - ft_countdigit(digit);
+         if (tmp.width > tmp.precision)
+                 space = tmp.width -  tmp.precision - f;
+         }
+         else if (tmp.width > ft_countdigit(digit))
+                  space = tmp.width - ft_countdigit(digit) - f;
+
+
+	f = 0;
+	if ( tmp.space == 1 && digit > 0 && tmp.plus == 0)
+		ft_putchar (' ');
+         if (tmp.minus != 1)
+       {
+         if (tmp.zero == 1 && tmp.precision == -1)
+	{
+	if (neg == 1)
+	{
+		digit =  digit * (-1);
+		ft_putchar('-');
+		neg = 0;
+		f = 1;
+	}
+	if (f != 1 && tmp.plus == 1)
+	{
+		ft_putchar ('+');
+		f++;
+	}
+         while(space-- > 0)
+                  ft_putchar('0');
+	}
+         else
+         while(space-- > 0)
+	{
+		if (tmp.zero == 1)
+			ft_putchar('0');
+		else
+                 ft_putchar(' ');
+	}
+       }
+	if (neg == 1 && tmp.precision > ft_countdigit(digit))
+	{
+		digit =  digit * (-1);
+		ft_putchar('-');
+		f = 1;
+	}
+	if (tmp.plus == 1 && digit >= 0 && f != 1)
+		ft_putchar('+'); 
+         while(zero-- > 0)
+                 ft_putchar('0');
+         ft_putnbr(digit);
+         if (tmp.minus == 1)
+         while(space-- > 0)
+                 ft_putchar(' ');
+}
+
+/*void    print_u(t_pattern tmp, va_list factor)
+{
+	long long digit;
+	int s;
+	int neg;
+	int pres;
+
+	neg = 0;
+	s = 0;
+	pres = 0;
+	digit = va_arg_help(factor, &tmp);
+	if (digit < 0)
+		neg = 1;
+	if (tmp.width >= (ft_countdigit(digit) + tmp.precision))
+	{
+		if (tmp.precision > ft_countdigit(digit))
+				s = tmp.width - tmp.precision;
+		s = tmp.width - s - ft_countdigit(digit) - neg;
+		while(s-- > 0)
+			ft_putchar(' ');
+	}
+	if (tmp.precision > ft_countdigit(digit))
+	{
+		s = tmp.precision - ft_countdigit(digit);
+			while(s-- > 0)
+				ft_putchar('0');
+	}
+	ft_putnbr(digit);
+}*/
+/*void	print_int(t_pattern tmp, va_list factor)
 {
 	long long digit;
 	int s;
@@ -125,7 +265,6 @@ void	print_int(t_pattern tmp, va_list factor)
 			tmp.width = tmp.width - (tmp.precision - ft_countdigit(digit));
 		if (tmp.plus == 1 || neg == 1 || tmp.space == 1)
 			neg = 1;
-//		s = tmp.width - ft_countdigit(digit) - tmp.plus - tmp.space - neg;
 		s = tmp.width - ft_countdigit(digit) - neg;
 		if (tmp.zero == 1 && tmp.precision == -1)
 			while (s-- > 0)
@@ -142,5 +281,5 @@ void	print_int(t_pattern tmp, va_list factor)
 		print_help (tmp.precision, &digit);
 	if (tmp.minus == 0 || tmp.plus == 1)
 		ft_putnbr(digit);
-}
+}*/
 

@@ -6,24 +6,30 @@
 #    By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/22 12:33:09 by lbritni           #+#    #+#              #
-#    Updated: 2019/07/07 18:52:41 by skrystin         ###   ########.fr        #
+#    Updated: 2019/07/07 21:00:18 by skrystin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_printf
+NAME = libftprintf.a
 
-OUT = *.o
-SRC = *.c libft/*.c
+OUT = *.o libft/*.o
+SRC1 = *.c libft/*.c
+HEADERS = printf.h libft/libft.h
 
 all: $(NAME)
 
 $(NAME):
-		gcc -o $(NAME) $(SRC)
+	@gcc -c -Wall -Wextra -Werror -std=c99 $(SRC1) $(HEADERS) 
+	@ar rc $(NAME) *.o;
+	@ranlib $(NAME);
 
 clean:
-		/bin/rm -f $(OUT)
+	@/bin/rm -f $(OUT)
 
 fclean: clean
-		/bin/rm -f $(NAME)
+	@/bin/rm -f $(NAME)
+	@/bin/rm -f *h.gch
+	@/bin/rm -f libft/libft.a
+	@/bin/rm -f libft/*h.gch
 
 re: fclean all

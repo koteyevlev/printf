@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/07 18:40:09 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/07 20:46:54 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct  s_pattern
 	int			hh;
 	int         l;
 	int         ll;
+	int			help;
 	char        type;
 }				t_pattern;
 
@@ -46,6 +47,9 @@ typedef	union				u_formlf
     t_formlfb				bytes;
 }							t_form_lf;
 
+void    print_u(t_pattern tmp, va_list factor);
+void    print_s(t_pattern tmp, va_list factor);
+void		print_c(t_pattern tmp, char c);
 void	ft_print_f(t_pattern tmp, long double nbr);
 long long        va_arg_help(va_list factor, t_pattern *tmp);
 void    put_cast(t_pattern *tmp, const char *format, int *i);
