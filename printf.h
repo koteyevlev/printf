@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/10 16:17:36 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 20:29:10 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,23 @@ typedef	union				u_formlf
     t_formlfb				bytes;
 }							t_form_lf;
 
+void	ft_print_main(t_pattern tmp, char **ld, char **ost, int byte);
+void	ft_print_main2(t_pattern tmp, char **ld, char **ost, int byte);
+int		ft_sign(int nbr);
+void	ft_round(char **ost, char **ld, t_pattern tmp);
+void	ft_roundtwo(char **ost, t_pattern tmp, char **one, char **tofree);
+void	ft_roundthr(char **one, t_pattern tmp, char **ld, char **ost);
+int		ft_notzero(char *str);
+char	*ft_zerostr(void);
+void	ft_print_krit(t_pattern tmp, double nbr, int step);
+void	ft_print_krit2(t_pattern tmp, double nbr, int step, int index);
+char	*ft_stept(int step);
+char	*ft_multt(char *f);
+char	*ft_dividet(char *f);
+char	*ft_substract(char *first, char *second);
+char	*ft_sum(char *first, char *second);
+void	ft_strcapitalize(char **str, intmax_t nmr);
+void	ft_privedenie(t_pattern tmp, intmax_t *ptr);
 void    print_u(t_pattern tmp, va_list factor);
 void    print_s(t_pattern tmp, va_list factor);
 void		print_c(t_pattern tmp, char c);

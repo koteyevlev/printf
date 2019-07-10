@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 21:10:14 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/10 17:24:12 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 18:56:16 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int main()
 {
 	int res;
 
-	res = ft_printf("%-#23.5hhX|%-023.5hhX|%#023.5hhX|%-#023.5hhX", ULLONG_MAX, ULLONG_MAX, ULLONG_MAX, ULLONG_MAX);
+	res = ft_printf("%.4932llf", DBL_MAX);
 	printf("\nmy res %d\n", res);
-	res = printf("%-#23.5hhX|%-023.5hhX|%#023.5hhX|%-#023.5hhX", ULLONG_MAX, ULLONG_MAX, ULLONG_MAX, ULLONG_MAX);
-	printf("\nprintf res %d\n", res);
+	//res = printf("%lld", −9223372036854775808);
+//	printf("\nprintf res %d\n", res);
 }
