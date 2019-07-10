@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:37:41 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/10 17:23:26 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 17:53:39 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,14 @@ void	ft_alternative(t_pattern *tmp, unsigned long long int ptr)
 	if ((ptr && ((tmp->type == 'x') && tmp->hash)) || tmp->type == 'p')
 	{
 		ft_putstr("0x");
-	//	tmp->width -= 2;
 	}
 	if (ptr && (((tmp->type == 'X') && tmp->hash)))
 	{
 		ft_putstr("0X");
-	//	tmp->width -= 2;
 	}
-	if ((tmp->type == 'o' && tmp->hash)  && (ptr || !tmp->precision)) // do not know
+	if ((tmp->type == 'o' && tmp->hash) && (ptr || !tmp->precision))
 	{
 		ft_putstr("0");
-	//	tmp->width -= 1;
 	}
 }
 
@@ -94,43 +91,8 @@ void	ft_fitstr(t_pattern tmp, char **str)
 	}
 }
 
-void	ft_print_p(t_pattern tmp, intmax_t ptr)
+void	ft_print_p3(t_pattern tmp, intmax_t ptr, char *str)
 {
-	char	*str;
-
-	if (tmp.type == 'o' && ptr == ULLONG_MAX && tmp.hh && (tmp.precision) && tmp.precision != -1)
-		tmp.hash = 0;
-	ft_privedenie(tmp, &ptr);
-	if (tmp.type != 'o')
-		str = ft_itoa_base(ptr, 16);
-	else
-		str = ft_itoa_base(ptr, 8);
-	ft_fitstr(tmp, &str);
-	if (!ptr && tmp.precision == -1)
-		tmp.hash = 0;
-	if (tmp.precision == -1 && tmp.width)
-		tmp.precision = tmp.width;
-	else
-		tmp.zero = 0;
-	if (ptr && ((tmp.type == 'p' || tmp.type == 'x'
-	|| tmp.type == 'X') && tmp.hash))
-		tmp.width -= 2;
-	if ((tmp.type == 'o' && tmp.hash) && ((tmp.precision >= tmp.width) || tmp.precision < (int)ft_strlen(str)) && (ptr || tmp.precision != -1))// && !tmp.minus)// && ptr))
-		tmp.width -= 1;
-	if (tmp.precision == 0 && ptr == 0 && (tmp.width > 0))
-		tmp.width++;
-	if (tmp.type == 'p')
-		tmp.width -= 2;
-	while (!tmp.minus && tmp.width > (int)ft_strlen(str) &&
-	!((tmp.type == 'x' || tmp.type == 'X') && tmp.zero))
-	{
-		if (tmp.zero && ((tmp.precision >= tmp.width) && tmp.precision))
-			ft_putchar('0');
-		else
-			ft_putchar(' ');
-		tmp.width--;
-	}
-	ft_alternative(&tmp, ptr);
 	while (!tmp.minus && tmp.width > (int)ft_strlen(str) &&
 	((tmp.type == 'x' || tmp.type == 'X') && tmp.zero))
 	{
@@ -149,6 +111,53 @@ void	ft_print_p(t_pattern tmp, intmax_t ptr)
 		ft_putchar(' ');
 		tmp.width--;
 	}
+}
+
+void	ft_print_p2(t_pattern tmp, intmax_t ptr, char *str)
+{
+	if ((tmp.type == 'o' && tmp.hash) && ((tmp.precision >= tmp.width)
+	|| tmp.precision < (int)ft_strlen(str)) && (ptr || tmp.precision != -1))
+		tmp.width -= 1;
+	if (tmp.precision == 0 && ptr == 0 && (tmp.width > 0))
+		tmp.width++;
+	if (tmp.type == 'p')
+		tmp.width -= 2;
+	while (!tmp.minus && tmp.width > (int)ft_strlen(str) &&
+	!((tmp.type == 'x' || tmp.type == 'X') && tmp.zero))
+	{
+		if (tmp.zero && ((tmp.precision >= tmp.width) && tmp.precision))
+			ft_putchar('0');
+		else
+			ft_putchar(' ');
+		tmp.width--;
+	}
+	ft_alternative(&tmp, ptr);
+	ft_print_p3(tmp, ptr, str);
+}
+
+void	ft_print_p(t_pattern tmp, intmax_t ptr)
+{
+	char	*str;
+
+	if (tmp.type == 'o' && ptr == ULLONG_MAX && tmp.hh
+	&& (tmp.precision) && tmp.precision != -1)
+		tmp.hash = 0;
+	ft_privedenie(tmp, &ptr);
+	if (tmp.type != 'o')
+		str = ft_itoa_base(ptr, 16);
+	else
+		str = ft_itoa_base(ptr, 8);
+	ft_fitstr(tmp, &str);
+	if (!ptr && tmp.precision == -1)
+		tmp.hash = 0;
+	if (tmp.precision == -1 && tmp.width)
+		tmp.precision = tmp.width;
+	else
+		tmp.zero = 0;
+	if (ptr && ((tmp.type == 'p' || tmp.type == 'x'
+	|| tmp.type == 'X') && tmp.hash))
+		tmp.width -= 2;
+	ft_print_p2(tmp, ptr, str);
 	if (ptr != 0 && ptr != ULLONG_MAX)
 		free(str);
 }

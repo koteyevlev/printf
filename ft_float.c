@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:47:46 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/10 17:28:09 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 18:10:26 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,39 +65,6 @@ char	*ft_substract(char *first, char *second)
 		return (0);
 	}
 }
-
-/* char	*ft_multstr(char *f, char *s)
-{
-	char	*new;
-	int		i;
-	int		j;
-	int		carry;
-	int		tmp;
-
-	i = 0;
-	new = (char *)malloc(sizeof(char) * 4934);
-	while (i < 4933)
-	{
-		new[i] = '0';
-		i++;
-	}
-	new[4933] = '\0';
-	i = 4932;
-	while (i >= 0)
-	{
-		carry = 0;
-		j = 4932;
-		while (j >= 0)
-		{
-			tmp = new[-(4932 - i - j)] - '0';
-			new[-(4932 - i - j)] = (tmp + carry + (f[i] - '0') * (s[j] - '0')) % 10 + '0';
-			carry = (tmp + carry + (f[i] - 48) * (s[j] - 48)) / 10;
-			j--;
-		}
-		i--;
-	}
-	return (new);
-} */
 
 char	*ft_dividet(char *f)
 {
@@ -185,11 +152,6 @@ void	ft_print_krit2(t_pattern tmp, double nbr, int step, int index)
 		ft_putchar('+');
 		index--;
 	}
-/*	else if (!tmp.minus && tmp.plus && nbr == -1.0 / 0.0) // ?
-	{
-		ft_putchar(' ');
-		index--;
-	} */
 	if (nbr == 1.0 / 0.0 || nbr == -1.0 / 0.0)
 		ft_putstr("inf");
 	else if (step == 16384)
@@ -220,8 +182,6 @@ void	ft_print_krit(t_pattern tmp, double nbr, int step)
 	}
 	if (nbr > 0 && (tmp.space || tmp.plus) && tmp.space && !tmp.plus)
 	{
-	//	if (tmp.plus)
-	//		ft_putchar('+');
 		if (tmp.space)
 			ft_putchar(' ');
 		index--;
@@ -246,11 +206,28 @@ int		ft_notzero(char *str)
 {
 	while (*str && *str == '0')
 		str++;
-//	ft_putchar(*str);
 	if (*str >= '1' && *str <= '9')
 		return (1);
 	else
 		return (0);
+}
+
+void	ft_round3(char **one, t_pattern tmp, char **ld, char **ost)
+{
+	(*one)[tmp.precision] = '0';
+	(*one)[4932] = '1';
+	if (ft_strindex("02468", (*ld)[4932]) >= 0 &&
+	(*ost)[tmp.precision + 1] == '5' && !ft_notzero(*ost + 2))
+		(*one)[4932] = '0';
+}
+
+void	ft_round2(char **ost, t_pattern tmp, char **one, char **tofree)
+{
+	*one = ft_zerostr();
+	(*one)[tmp.precision] = '1';
+	*tofree = *ost;
+	*ost = ft_sum(*tofree, *one);
+	free(*tofree);
 }
 
 void	ft_round(char **ost, char **ld, t_pattern tmp)
@@ -262,34 +239,22 @@ void	ft_round(char **ost, char **ld, t_pattern tmp)
 	if (tmp.precision > 4932)
 		return ;
 	if (ft_strindex("56789", (*ost)[tmp.precision + 1]) < 0)
-	{
 		(*ost)[tmp.precision + 1] = '\0';
-		return ;
-	}
 	else
 	{
-		one = ft_zerostr();
-		one[tmp.precision] = '1';
-		tofree = *ost;
+		ft_round2(ost, tmp, &one, &tofree);
 		i = 1;
-		*ost = ft_sum(tofree, one);
 		while ((*ost)[i] == '0' && tmp.precision >= i)
 			i++;
-		free(tofree);
 		if (tmp.precision <= i)
 		{
-			one[tmp.precision] = '0';
-			one[4932] = '1';
-			if (ft_strindex("02468", (*ld)[4932]) >= 0 &&
-			(*ost)[tmp.precision + 1] == '5' && !ft_notzero(*ost + 2))
-				one[4932] = '0';
+			ft_round3(&one, tmp, ld, ost);
 			tofree = *ld;
 			(*ld) = ft_sum(tofree, one);
 			free(tofree);
 		}
 		(*ost)[tmp.precision + 1] = '\0';
 		free(one);
-		return ;
 	}
 }
 
@@ -312,7 +277,7 @@ void	ft_print_main2(t_pattern tmp, char **ld, char **ost, int byte)
 	if (tmp.plus && byte < 4932 && (*ld)[byte] == '0')
 		byte++;
 	ft_putstr(&((*ld)[byte]));
-	if (tmp.precision != 0 || tmp.hash) // bag with width, maybe dont work
+	if (tmp.precision != 0 || tmp.hash)
 		ft_putchar('.');
 	else
 		tmp.width++;
@@ -322,7 +287,7 @@ void	ft_print_main2(t_pattern tmp, char **ld, char **ost, int byte)
 	while (tmp.minus && (byte + tmp.width - tmp.precision - 4934) > 0)
 	{
 		ft_putchar(' ');
-		byte = byte - ft_sign(byte + tmp.width - tmp.precision - 4934); //dont know
+		byte = byte - ft_sign(byte + tmp.width - tmp.precision - 4934);
 	}
 }
 
