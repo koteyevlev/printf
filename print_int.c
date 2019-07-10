@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/07 20:47:39 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/09 20:22:50 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ void	put_cast(t_pattern *tmp, const char *format, int *i)
 	{
 		tmp->hh = 1;
 		(*i) = (*i) + 2;
+	}
+	else if (format[*i] == 'L')
+	{
+		tmp->L = 1;
+		(*i)++;
 	}
 	else if (format[*i] == 'l' && format[(*i) + 1] != 'l')
 	{

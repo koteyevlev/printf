@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/07 21:43:21 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/09 20:07:43 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct  s_pattern
 	int         h;
 	int			hh;
 	int         l;
+	int			L;
 	int         ll;
 	int			help;
 	char        type;

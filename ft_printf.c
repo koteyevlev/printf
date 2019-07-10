@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/07 21:42:23 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 15:26:40 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 void		new_pattern(t_pattern *tmp)
 {
 	tmp->hash = 0;
+	tmp->L = 0;
 	tmp->minus = 0;
 	tmp->plus = 0;
 	tmp->space = 0;
@@ -37,7 +38,7 @@ void		new_pattern(t_pattern *tmp)
 
 int			ft_cast(char c)
 {
-	if (c == 'h' || c == 'l' || c == 'j' || c == 'z')
+	if (c == 'h' || c == 'l' || c == 'j' || c == 'z' || c == 'L')
 		return (1);
 	else
 		return (0);
@@ -48,7 +49,7 @@ int			type(char c)
 	if (c == 's' || c == 'S' || c == 'p' || c == 'd' ||
 		c == 'D' || c == 'i' || c == 'o' || c == 'O' ||
 		c == 'u' || c == 'U' || c == 'x' || c == 'X' ||
-		c == 'c' || c == 'C')
+		c == 'c' || c == 'C' || c == 'f')
 		return (1);
 	else
 		return (0);
@@ -76,9 +77,14 @@ int			print(t_pattern tmp, va_list factor)
 	}
 	else if (tmp.type == 's')
 		print_s(tmp, factor);
+	else if (tmp.type == 'f' && tmp.L)
+	{
+		//printf("%Lf", va_arg(factor, long double));
+		ft_print_f(tmp, va_arg(factor, long double));
+	}
 	else if (tmp.type == 'f')
 		ft_print_f(tmp, va_arg(factor, double));
-	else if (tmp.type == 'f' || tmp.type == 'x'
+	else if (tmp.type == 'p' || tmp.type == 'x'
 	|| tmp.type == 'X' || tmp.type == 'o')
 		ft_print_p(tmp, va_arg(factor, unsigned long long int));
 	return (0);
