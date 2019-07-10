@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/04 17:47:46 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/09 20:35:02 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 17:28:09 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,24 +338,16 @@ void	ft_print_main(t_pattern tmp, char **ld, char **ost, int byte)
 	while (*ld && (*ld)[byte] == '0' && ((byte + tmp.width -
 	tmp.precision - 4934) != 0 || tmp.minus) && byte < 4932)
 		byte++;
-//	ft_putnbr(byte);
-//	ft_putchar('\n');
 	if (tmp.plus && (*ld)[byte] == '0' && byte < 4932 && !tmp.zero)
 		byte++;
 	if (!tmp.precision && ft_notzero(*ld) && tmp.width >= 4933 - byte)
 		byte--;
-//	ft_putnbr(byte);
-//	ft_putchar('\n');
 	while (!tmp.zero && *ld && (*ld)[byte] == '0' && !tmp.minus && byte <= 4931)
 	{
-	//	if (byte == 4931 && tmp.plus)
-	//		break ;
 		ft_putchar(' ');
 		tmp.space = 0;
 		byte++;
 	}
-//	ft_putnbr(byte);
-//	ft_putchar('\n');
 	ft_print_main2(tmp, ld, ost, byte);
 	free(*ld);
 	free(*ost);

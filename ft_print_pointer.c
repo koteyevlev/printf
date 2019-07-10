@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/07 16:37:41 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/10 16:02:25 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 17:23:26 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 #include <string.h>
 #include "libft/libft.h"
 #include "printf.h"
+#include <limits.h>
 
-void	ft_strcapitalize(char **str)
+void	ft_strcapitalize(char **str, intmax_t nmr)
 {
 	int	index;
 
 	index = 0;
+	if (nmr == ULLONG_MAX)
+		*str = "FFFFFFFFFFFFFFFF";
 	while ((*str)[index])
 	{
 		if ((*str)[index] >= 'a' && (*str)[index] <= 'z')
@@ -29,7 +32,7 @@ void	ft_strcapitalize(char **str)
 	}
 }
 
-void	ft_privedenie(t_pattern tmp, unsigned long long int *ptr)
+void	ft_privedenie(t_pattern tmp, intmax_t *ptr)
 {
 	if (tmp.type == 'p' || tmp.ll)
 		return ;
@@ -91,10 +94,12 @@ void	ft_fitstr(t_pattern tmp, char **str)
 	}
 }
 
-void	ft_print_p(t_pattern tmp, unsigned long long int ptr)
+void	ft_print_p(t_pattern tmp, intmax_t ptr)
 {
 	char	*str;
 
+	if (tmp.type == 'o' && ptr == ULLONG_MAX && tmp.hh && (tmp.precision) && tmp.precision != -1)
+		tmp.hash = 0;
 	ft_privedenie(tmp, &ptr);
 	if (tmp.type != 'o')
 		str = ft_itoa_base(ptr, 16);
@@ -136,7 +141,7 @@ void	ft_print_p(t_pattern tmp, unsigned long long int ptr)
 		tmp.width--;
 	}
 	if (tmp.type == 'X')
-		ft_strcapitalize(&str);
+		ft_strcapitalize(&str, ptr);
 	if (tmp.precision != 0 || ptr != 0)
 		ft_putstr(str);
 	while (tmp.minus && tmp.width > (int)ft_strlen(str))
@@ -144,6 +149,6 @@ void	ft_print_p(t_pattern tmp, unsigned long long int ptr)
 		ft_putchar(' ');
 		tmp.width--;
 	}
-	if (ptr != 0)
+	if (ptr != 0 && ptr != ULLONG_MAX)
 		free(str);
 }

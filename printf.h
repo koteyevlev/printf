@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/09 20:07:43 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 16:17:36 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ int	print(t_pattern tmp, va_list factor);
 int	ft_search(char c, t_pattern tmp, va_list factor);
 int	ft_parse(const char *format, int *i, t_pattern *tmp, va_list factor);
 int	ft_printf(const char *format, ...);
-char	*ft_itoa_base(long long int value, long int base);
-void	ft_print_p(t_pattern tmp, unsigned long long int ptr);
+char	*ft_itoa_base(intmax_t value, long int base);
+void	ft_print_p(t_pattern tmp, intmax_t ptr);

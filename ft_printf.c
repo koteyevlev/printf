@@ -6,7 +6,7 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 17:53:09 by wtorwold          #+#    #+#             */
-/*   Updated: 2019/07/10 15:26:40 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 16:18:37 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int			print(t_pattern tmp, va_list factor)
 		ft_print_f(tmp, va_arg(factor, double));
 	else if (tmp.type == 'p' || tmp.type == 'x'
 	|| tmp.type == 'X' || tmp.type == 'o')
-		ft_print_p(tmp, va_arg(factor, unsigned long long int));
+		ft_print_p(tmp, va_arg(factor, intmax_t));
 	return (0);
 }
 

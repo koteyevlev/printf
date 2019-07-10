@@ -6,21 +6,22 @@
 /*   By: skrystin <skrystin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 21:05:41 by skrystin          #+#    #+#             */
-/*   Updated: 2019/07/09 21:18:57 by skrystin         ###   ########.fr       */
+/*   Updated: 2019/07/10 16:32:52 by skrystin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
+#include <limits.h>
 
-long long int	ft_modul(long int nmr)
+intmax_t		ft_modul(intmax_t nmr)
 {
-	if (nmr < 0)
+	if (nmr < 0 && nmr != ULLONG_MAX)
 		return (-nmr);
 	return (nmr);
 }
 
-char			*ft_helpitoa(long long int value, long int base,
-long long int len, long long int nbr)
+char			*ft_helpitoa(intmax_t value, intmax_t base,
+intmax_t len, intmax_t nbr)
 {
 	char	*res;
 	char	*basestr;
@@ -29,6 +30,10 @@ long long int len, long long int nbr)
 	if (!(res = (char *)malloc(sizeof(char) * (len + 1))))
 		return (0);
 	res[len] = '\0';
+	if (nbr == ULLONG_MAX && base == 8)
+		return (res = "1777777777777777777777");
+	if (nbr == ULLONG_MAX && base == 16)
+		return (res = "ffffffffffffffff");
 	while (nbr)
 	{
 		res[--len] = basestr[nbr % base];
@@ -39,10 +44,10 @@ long long int len, long long int nbr)
 	return (res);
 }
 
-char		*ft_itoa_base(long long int value, long int base)
+char		*ft_itoa_base(intmax_t value, long int base)
 {
-	long long int		len;
-	long long int		nbr;
+	intmax_t		len;
+	intmax_t		nbr;
 
 	if (!value)
 		return ("0");
